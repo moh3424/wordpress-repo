@@ -1,0 +1,176 @@
+**********************************************
+**********Wrdpress********************
+***********************************
+
+
+**************************
+Instalation de WP
+***********************
+
+On installe WP dans un dossier /eprojet/ dans XAMPP.
+	Nom de la BDD : eprojet
+	Titre du site : Mes petites annonces
+
+Etapes d'installation :
+1-Télécharger WP sur https://fr.wordpress.org/
+2-Dézipper l'archive et mettre le dossier sur XAMPP ou WAMP
+3-Dans PHPMyAdmin : créer une BDD (vide)
+4-Lancer le site via localhost dans le navigateur et remplir les formulaires
+	-Nom de la BDD
+	-Identifiant de la BDD
+	-Mot de passe de la BDD
+	-Adresse de la BDD : localhost pour nous
+
+	-Titre du site 
+	-Identifiant et le moot de passe d'aministration
+
+5- WP s'installe... puis on se connecte au back-office avec les identifiants indiqués précédemment.
+
+URL d'accès au back-office par defaut :  https://monsite.com/wp-admin/
+
+
+**************************
+Créer un thème enfant
+**************************
+
+-Les AVANTAGES d'un thème enfant :
+Grâce aux thème enfants, vous pouvez modifier un thème existant en conservant le bénéfice des mises à jour du thème parent (exemples :nouvelles fonctionnalités, mises à jour de sécurité ...)
+
+Un thème enfant vous permet de modifier les STYLES et les FICHIERS TEMPLARES d'un thème existant parent, ainsi que d'ajouter des FONCTIONNALITES.
+
+-CREER un thème enfant :
+1-Pour créer un thème enfant du thème "twentyseventeen", on crée un dossier "twentyseventeen-child" dans le dossier /wp_content/themes. On nomme le dossier enfant ainsi comme le veut la bonne pratique.
+2- Y créer un fichier style.css (sans S) et y mettre le code suivant :
+	/*
+	Theme: twentyseventeen-child
+	Template: twentyseventeen
+	*/
+	
+	@import url("../twentyseventeen/style.css");
+
+Attention : ne pas séparer les ":" des étiquettes Theme Name et Template ci-dessus par espace !
+
+le code CSS du thème enfant ECRASE le code CSS parent, car il est exécuté APRES celui du parent
+
+3-ACTIVER le thème enfant dans le back-office. Puis vous pouvez le modifier.
+
+4- Modifier un fichier template :
+	Pour cela, il suffit de copier le fichier parent que l'on veut modifier dans le dossier du thème enfant.
+
+	Exemple :
+	Copier le fichier footer.php du thème parent et le copier dans le thème enfant.
+	Puis modifier sa structure HTML conformément à la maquette du client.
+
+	Le fichier template enfant REMPLACE celui du thème parent.
+
+5-Le fichier functions.php :
+	Ce fichier fonctionne différement : il n'écrase pas le fichier du parent, mais il est chargé AVANT celui du parent. Ainsi, les fonctions enfants s'ajoutent à celles du parent. Nous verrons ce fichier functions.php plus tard dans le cours.
+
+**********************************
+La hiérarchie des template de WP
+**********************************
+
+//Installer l'extension SHOW CURRENT TEMPLATE de Jotaki Taisuke.
+
+// La hiérarchie WP :
+Exemple avec la page d'accueil : si le fichier template front-page.php existe, WP l'utilise pour afficher la page. S'il n'existe pas, WP continue son "chemin" et prend le fichier suivant home.php. S'il n'existe pas non plus, WP continue son "chemin" et prend par défaut le fichier index.php.
+
+// Descriptiondes fichiers templates de la hiérarchie :
+Un template est un modèle de page. S'il ya 100 pages sur votre site, il n'ya pas 100 fichiers (comme pour les sites statiques) : les contenu sont enregistés dans la BDD, et seulement quelques fichiers appelés template affichent le contenu dynamiquement (= automatiquement).
+
+index.php : fichier principal du site qui est utilisé si aucun des autres templates demandés n'existent (template par défaut).
+
+archive.php : affiche la liste des articles quand les fichiers spécifiques n'existent pas (author.php, category.php, tag.php ou date.php => cf hiérarchie)
+
+single.php : affiche un seul article créé dans le back-office
+
+page.php : affiche une page créée dans le back-office
+
+home.php : affichage de la page d'accueil prioritaire sur index.php si le fichier home.php existe
+
+comments.php : affichage des commentaires
+
+404.php : affiche la page de contenu non trouvé
+
+serch.php : affiche les résultats d'une recherche
+
+------------------
+
+function.php : fichier d'inclusion contenant les fonctions du thème
+
+header.php : fichier d'inclusion du haut du site (systématiquement inclus dans les templates du site)
+
+footer.php : fichier d'inclusion du bas du site (systématiquement inclus dans les templates du site)
+
+sidebar.php : fichier d'inclusion de la bar latérale contenant des widgets (ou autres chose) qui est inclus dans les templates du site
+
+-------------------
+
+//Template spécifiques :
+On peut dans WP faire des templates particuliers sur la base des fichiers template d'origine vus ci-dessus, en leur ajoutant un id ou un slug dans le nom du fichier.
+
+"slug" signifie en anglais "identifiant" :il représente un élément de contenu, article ou page. Exemple : l'article "Seul sur mars" aura pour slug "seul-sur-mars" et pour url https://monsite.com/seul-sur-mars.
+
+-Page spécifique dans l'ordre de priorité:
+	-page-$slug.php (exemple : page-contact.php)
+	-page-$id.php   (exemple : page-3.php)
+	-page.php
+	-index.php
+
+-Catégorie spécifique dans l'ordre de priorité :
+	-category-$slug.php (exemple : category-auto.php)
+	-category-$id.php (exemple : category-105.php)
+	-category.php
+	-archive.php
+	-index.php
+
+
+***********************************
+Développement d'un thème complet
+**********************************
+
+Les grande étapes seront :
+	01. Création du thème graphique et des ses templates
+	02.Initialisation des zones de widgets
+	03.Initialisation des zones de menus
+	04. Création du menu principal et d'une front page
+	05. Création d'un type de contenu "annonces" avec des champs personnalisés 5CPT UI et ACF°
+	06. Création des templates spécifiques : single-annonce.php et category-blog-auto.php
+	07. Création du template spécifique : category.php
+	08. Afficher la dernière annonce parue
+
+*********************************************************
+01. Création du thème graphique et des ses templates
+*********************************************************
+
+//Créer undossier au nom du thème "eprojet" dans :
+
+	wp-content/themes
+
+Nous allos y mettre tous nos fichiers du thème.
+
+// Création du screenshot du site :
+Il s'agit du fichier qui s'appelle screenshot.png. Il représente le thème dans le back-office.
+
+// Création de la feuile de style : style.css
+Le fichier style.css contien en commentaire toutes les infos affichées dans le back-office > apparence > thèmes.
+
+On y met le code suivant :
+
+/*
+Theme Name: eprojet
+Author: moi
+Description: Thème du site de petites annonces de véhicules d'occasion.
+Version: 1.0
+*/
+
+// Création d'un sous-dossier : /assets/
+
+On y met les ressources nécessaires au site (img, CSS, JS, etc.)
+
+// Création du fichier d'inclusion header.php :
+Pour le code, voir le fichier correspondant.
+
+// Création d'un fichier d'inclusion footer.php
+Pour le code, voir le fichier correspondant.
+
